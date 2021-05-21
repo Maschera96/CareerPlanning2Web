@@ -1,0 +1,31 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "杭电职规管理端"
+			}
+		},{
+			"path": "pages/index/newCompany",
+			"style": {
+				"navigationBarTitleText": "新增企业"
+			}
+		},{
+			"path": "pages/index/position/position",
+			"style": {
+				"navigationBarTitleText": "岗位列表"
+			}
+		},{
+			"path": "pages/index/position/newPosition",
+			"style": {
+				"navigationBarTitleText": "新增岗位"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
