@@ -1,38 +1,20 @@
 <template>
 	<el-container style="height: 800px; border: 1px solid #eee">
-		<el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-			<el-menu :default-openeds="['1', '3']">
+		<el-aside width="170px" style="background-color: rgb(238, 241, 246)">
+			<el-menu :default-openeds="['1', '2']">
 				<el-submenu index="1">
-					<template slot="title"><i class="el-icon-message"></i>导航一</template>
-					<el-menu-item-group>
-						<template slot="title">分组一</template>
-						<el-menu-item index="1-1">选项1</el-menu-item>
-						<el-menu-item index="1-2">选项2</el-menu-item>
-					</el-menu-item-group>
-					<el-menu-item-group title="分组2">
-						<el-menu-item index="1-3">选项3</el-menu-item>
-					</el-menu-item-group>
-					<el-submenu index="1-4">
-						<template slot="title">选项4</template>
-						<el-menu-item index="1-4-1">选项4-1</el-menu-item>
-					</el-submenu>
+					<template slot="title"><i class="el-icon-message"></i>工作城市</template>
+					<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange" class="checkboxGroup">
+						<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+					</el-checkbox-group>
 				</el-submenu>
 				<el-submenu index="2">
-					<template slot="title"><i class="el-icon-menu"></i>导航二</template>
-					<el-menu-item-group>
-						<template slot="title">分组一</template>
-						<el-menu-item index="2-1">选项1</el-menu-item>
-						<el-menu-item index="2-2">选项2</el-menu-item>
-					</el-menu-item-group>
-					<el-menu-item-group title="分组2">
-						<el-menu-item index="2-3">选项3</el-menu-item>
-					</el-menu-item-group>
-					<el-submenu index="2-4">
-						<template slot="title">选项4</template>
-						<el-menu-item index="2-4-1">选项4-1</el-menu-item>
-					</el-submenu>
+					<template slot="title"><i class="el-icon-menu"></i>岗位类型</template>
+					<el-checkbox-group v-model="checkedType" @change="handleCheckedCitiesChange" class="checkboxGroup">
+						<el-checkbox v-for="type in jobType" :label="type" :key="type">{{type}}</el-checkbox>
+					</el-checkbox-group>
 				</el-submenu>
-				<el-submenu index="3">
+				<!-- <el-submenu index="3">
 					<template slot="title"><i class="el-icon-setting"></i>导航三</template>
 					<el-menu-item-group>
 						<template slot="title">分组一</template>
@@ -46,7 +28,7 @@
 						<template slot="title">选项4</template>
 						<el-menu-item index="3-4-1">选项4-1</el-menu-item>
 					</el-submenu>
-				</el-submenu>
+				</el-submenu> -->
 			</el-menu>
 		</el-aside>
 
@@ -107,7 +89,11 @@
 			return {
 				tableData: Array(20).fill(item),
 				job: [],
-				name: ''
+				name: '',
+				checkedCities: ['上海', '北京'],
+				cities: ['上海', '北京', '广州', '深圳'],
+				checkedType: ['运营', '研发'],
+				jobType: ['运营', '研发', '销售', '管理'],
 			}
 		},
 		onLoad(e) {
@@ -127,6 +113,30 @@
 					success: (res) => {
 						console.log(res.data.data.data);
 						this.job = res.data.data.data
+					}
+				})
+			},
+			handleCheckedCitiesChange(value) {
+				// console.log(this.checkedCities);
+				let [pageIndex,pageSize,_jobPlace,_jobType] = [1,10,this.checkedCities[0],this.checkedType[0]]
+				for(let i = 1; i<this.checkedCities.length; i++){
+					_jobPlace += ` ${this.checkedCities[i]}`
+				}
+				for(let i = 1; i<this.checkedType.length; i++){
+					_jobType += ` ${this.checkedType[i]}`
+				}
+				uni.request({
+					url: `http://1.15.175.248:8004/search/job/${pageIndex}/${pageSize}`,
+					method: 'POST',
+					header: {
+						'Content-Type': 'application/json'
+					},
+					data: {
+						'jobPlaces': _jobPlace,
+						'jobType': _jobType
+					},
+					success: (res) => {
+						console.log(res);
 					}
 				})
 			},
@@ -167,4 +177,15 @@
 	.mybtn{
 		margin-right: 10px;
 	}
+	
+	.checkboxGroup{
+		display: flex;
+		flex-direction: column;
+		/* align-items: center; */
+	}
+	
+	.el-checkbox{
+		margin: 10px 0px 10px 40px;
+	}
+	
 </style>
