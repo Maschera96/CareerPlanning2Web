@@ -4,7 +4,8 @@
 			<el-menu :default-openeds="['1', '2']">
 				<el-submenu index="1">
 					<template slot="title"><i class="el-icon-message"></i>工作城市</template>
-					<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange" class="checkboxGroup">
+					<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange"
+						class="checkboxGroup">
 						<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
 					</el-checkbox-group>
 				</el-submenu>
@@ -57,18 +58,13 @@
 					</el-table-column>
 					<el-table-column label="操作" width="150">
 						<template slot-scope="scope">
-							<el-button class="mybtn" size="mini" @click="editJob(scope.row)">编辑</el-button>
-							<el-popconfirm
-							  confirm-button-text='删除'
-							  cancel-button-text='不用了'
-							  icon="el-icon-info"
-							  icon-color="red"
-							  title="确定删除该岗位嘛？"
-							  @confirm="deleteJob(scope.row)"
-							>
+							<el-popover class="mybtn" placement="top-start" title="注意" trigger="click" content="编辑岗位功能暂未开放!">
+								<el-button size="mini" @click="editJob(scope.row)" slot="reference">编辑</el-button>
+							</el-popover>
+							<el-popconfirm confirm-button-text='删除' cancel-button-text='不用了' icon="el-icon-info"
+								icon-color="red" title="确定删除该岗位嘛？" @confirm="deleteJob(scope.row)">
 								<el-button size="mini" type="danger" slot="reference">删除</el-button>
 							</el-popconfirm>
-							<!-- <el-button size="mini" type="danger" @click="deleteJob(scope.row)">删除</el-button> -->
 						</template>
 					</el-table-column>
 				</el-table>
@@ -118,11 +114,11 @@
 			},
 			handleCheckedCitiesChange(value) {
 				// console.log(this.checkedCities);
-				let [pageIndex,pageSize,_jobPlace,_jobType] = [1,10,this.checkedCities[0],this.checkedType[0]]
-				for(let i = 1; i<this.checkedCities.length; i++){
+				let [pageIndex, pageSize, _jobPlace, _jobType] = [1, 10, this.checkedCities[0], this.checkedType[0]]
+				for (let i = 1; i < this.checkedCities.length; i++) {
 					_jobPlace += ` ${this.checkedCities[i]}`
 				}
-				for(let i = 1; i<this.checkedType.length; i++){
+				for (let i = 1; i < this.checkedType.length; i++) {
 					_jobType += ` ${this.checkedType[i]}`
 				}
 				uni.request({
@@ -153,7 +149,7 @@
 					}
 				})
 			},
-			newJob(){
+			newJob() {
 				console.log('newJob');
 				uni.navigateTo({
 					url: `/pages/index/position/newPosition?companyIndexCode=${this.index}`
@@ -173,19 +169,18 @@
 	.el-aside {
 		color: #333;
 	}
-	
+
 	.mybtn{
 		margin-right: 10px;
 	}
-	
-	.checkboxGroup{
+
+	.checkboxGroup {
 		display: flex;
 		flex-direction: column;
 		/* align-items: center; */
 	}
-	
-	.el-checkbox{
+
+	.el-checkbox {
 		margin: 10px 0px 10px 40px;
 	}
-	
 </style>
