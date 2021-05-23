@@ -1,129 +1,116 @@
 <template>
-	<el-row>
-		<el-col class="top" :span="4" v-for="(item, index) in company" :key="index" :offset="index%3 > 0 ? 2 : 4">
-			<el-card :body-style="{ padding: '0px' }" shadow="hover" class="card">
-				<div class="img">
-					<img :src="item.companyLogo"
-						class="image">
-				</div>
-				<div style="padding: 14px;">
-					<span style="color: #409EFF;">{{ item.companyName }}</span>
-					<div class="bottom clearfix">
-						<time class="time">{{ item.slogan }}</time>
-						<el-button type="text" class="button">删除</el-button>
-					</div>
-				</div>
-			</el-card>
-		</el-col>
-		<el-col class="top" :span="4" :offset="(company.length)%3 > 0 ? 2 : 4" @click="newCompany()">
-			<el-card :body-style="{ padding: '0px' }" shadow="hover" class="card">
-				<div class="img">
-					<image src=/static/tianjia.png alt="添加"/>
-				</div>
-				<div class="content">
-					<span style="color: #409EFF;">添加企业</span>
-					<!-- <div class="bottom clearfix">
-						<time class="time">{{ item.slogan }}</time>
-						<el-button type="text" class="button">删除</el-button>
-					</div> -->
-				</div>
-			</el-card>
-		</el-col>
-	</el-row>
+	<view class="course_item">
+		<view class="level">{{level}}</view>
+		<view class="courseone">
+			<view class="course_name">{{courseName}}</view>
+			<view class="course_summary">{{collegeName}}</view>
+		</view>
+		<view :class="[req == '必修'?'course_request1':'course_request2']">{{req}}</view>
+	</view>
 </template>
 
 <script>
 	export default {
+		props: {
+			lessonCode: {
+				type: String,
+			},
+			courseName: {
+				type: String,
+			},
+			collegeName: {
+				type: String,
+			}
+		},
 		data() {
+			let level
+			let req = '选修'
+			switch(this.lessonCode[0]){
+				case 'A':
+					level = 'A类';
+					req = '必修';
+					break;
+				case 'B':
+					level = 'B类';
+					break;
+				default:
+					level = 'C类';
+					break;
+			}
 			return {
-				currentDate: new Date(),
-				company: []
+				level: level,
+				req: req
 			};
 		},
 		created: function() {
-			let pageIndex = 1
-			let pageSize = 5
-
-			uni.request({
-				url: `http://1.15.175.248:8000/company/list/${pageIndex}/${pageSize}`,
-				method: 'GET', 
-				success: (res) => {
-					this.company = res.data.data.data
-					console.log(this.company);
-				},
-				fail: (err) => {
-					console.log('failed', err);
-				}
-			})
 		},
 		methods:{
-			newCompany:() => {
-				console.log('start goto');
-				uni.navigateTo({
-					url: 'newCompany'
-				})
-			}
 		}
 	}
 </script>
 
 <style>
-	.time {
-		font-size: 13px;
-		line-height: 20px;
-		color: #999;
+	
+	.course_item {
+		border: 1px solid #ffffff;
+		border-radius: 4px;
+		box-shadow: 0px 3px 6px #e6e6e6;
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;
+		flex-direction: row;
+		width: 270px;
+		height: 80px;
+		margin-top: 10px;
+		padding: 0px 10px;
+		align-items: center;
+		justify-content: space-around;
 	}
 	
-	.top{
-		margin-top: 50px;
-	}
-
-	.bottom {
-		margin-top: 13px;
-		line-height: 12px;
-	}
-	
-	.img{
-		padding: 20px;
-		height: 130px;
+	.courseone {
 		display: flex;
 		flex-direction: column;
+		width: 200px;
+		position: relative;
+		left: 10px;
+	}
+	
+	.level {
+		border: 1px solid #5b5b5b;
+		color: #5b5b5b;
+		height: 13px;
+		width: 30px;
+		font-size: 12px;
+		display: flex;
 		justify-content: center;
 		align-items: center;
 	}
 	
-	.img image{
-		height: 130px;
-		width: 130px;
-	}
-
-	.button {
-		padding: 5px;
-		float: right;
-	}
-
-	.image {
-		width: 100%;
-		display: block;
+	.course_name {
+		font-size: 16px;
+		font-weight: bold;
+		color: #5f656c;
 	}
 	
-	.content{
-		padding: 14px;
+	.course_summary {
+		color: #5b5b5b;
+		margin-top: 10px;
+		font-size: 12px;
+	}
+	
+	.course_request1{
+		color: #e1945f;
 		display: flex;
-		justify-content: center;
+		align-items: center;
+		margin-left: 5px;
+		font-size: 8px;
 	}
 	
-	.card{
-		height: 280px;
-	}
-
-	.clearfix:before,
-	.clearfix:after {
-		display: table;
-		content: "";
-	}
-
-	.clearfix:after {
-		clear: both
+	.course_request2{
+		color:#37c17c;
+		display: flex;
+		align-items: center; 
+		margin-left: 5px;
+		font-size: 8px;
 	}
 </style>

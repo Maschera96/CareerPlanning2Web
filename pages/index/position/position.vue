@@ -58,7 +58,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="150">
 						<template slot-scope="scope">
-							<el-popover class="mybtn" placement="top-start" title="注意" trigger="click" content="编辑岗位功能暂未开放!">
+							<el-popover class="mybtn" placement="top-start" title="对不起" trigger="click" content="编辑岗位功能暂未开放!">
 								<el-button size="mini" @click="editJob(scope.row)" slot="reference">编辑</el-button>
 							</el-popover>
 							<el-popconfirm confirm-button-text='删除' cancel-button-text='不用了' icon="el-icon-info"
@@ -95,7 +95,7 @@
 		onLoad(e) {
 			this.index = e.indexCode
 			this.name = e.companyName
-			this.load(e.indexCode)
+			// this.load(e.indexCode)
 		},
 		onShow() {
 			this.load(this.index)
