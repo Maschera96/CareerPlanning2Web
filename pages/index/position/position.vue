@@ -87,7 +87,7 @@
 				job: [],
 				name: '',
 				checkedCities: ['上海', '北京'],
-				cities: ['上海', '北京', '广州', '深圳'],
+				cities: ['上海', '北京', '广州', '深圳', '杭州'],
 				checkedType: ['运营', '研发'],
 				jobType: ['运营', '研发', '销售', '管理'],
 			}
@@ -98,6 +98,8 @@
 			// this.load(e.indexCode)
 		},
 		onShow() {
+			this.checkedCities = []
+			this.checkedType = []
 			this.load(this.index)
 		},
 		methods: {
@@ -113,14 +115,10 @@
 				})
 			},
 			handleCheckedCitiesChange(value) {
-				// console.log(this.checkedCities);
-				let [pageIndex, pageSize, _jobPlace, _jobType] = [1, 10, this.checkedCities[0], this.checkedType[0]]
-				for (let i = 1; i < this.checkedCities.length; i++) {
-					_jobPlace += ` ${this.checkedCities[i]}`
-				}
-				for (let i = 1; i < this.checkedType.length; i++) {
-					_jobType += ` ${this.checkedType[i]}`
-				}
+				let [pageIndex, pageSize] = [1, 10]
+				let _jobPlace, _jobType
+				if(this.checkedCities.length === 0){_jobPlace = this.cities.join(' ')}else{_jobPlace = this.checkedCities.join(' ')}
+				if(this.checkedType.length === 0){_jobType = this.jobType.join(' ')}else{_jobType = this.checkedType.join(' ')}
 				uni.request({
 					url: `http://1.15.175.248:8004/search/job/${pageIndex}/${pageSize}`,
 					method: 'POST',
@@ -129,10 +127,12 @@
 					},
 					data: {
 						'jobPlaces': _jobPlace,
-						'jobType': _jobType
+						'jobTypes': _jobType,
+						'companyIndexCode': this.index
 					},
 					success: (res) => {
 						console.log(res);
+						this.job = res.data.data.data
 					}
 				})
 			},
