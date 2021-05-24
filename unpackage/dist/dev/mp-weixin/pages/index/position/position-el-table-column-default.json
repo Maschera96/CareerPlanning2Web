@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "position-el-table-column-default": "/pages/index/position/position-el-table-column-default"
+  }
+}

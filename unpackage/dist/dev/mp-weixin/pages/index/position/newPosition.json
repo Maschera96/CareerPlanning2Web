@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "新增岗位",
+  "usingComponents": {
+    "necessary-title": "/components/NecessaryTitle",
+    "card": "/components/Card"
+  }
+}

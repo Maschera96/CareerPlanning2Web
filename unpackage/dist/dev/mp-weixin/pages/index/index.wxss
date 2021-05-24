@@ -1,0 +1,63 @@
+
+.time {
+	font-size: 13px;
+	line-height: 20px;
+	color: #999;
+}
+.top{
+	margin-top: 50px;
+}
+.bottom {
+	margin-top: 13px;
+	line-height: 12px;
+}
+.img{
+	padding: 20px;
+	height: 130px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+}
+.img image{
+	height: 110px;
+	width: 110px;
+}
+.button {
+	padding: 5px;
+	float: right;
+}
+.image {
+	width: 100%;
+	display: block;
+}
+.content{
+	padding: 14px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+}
+.card{
+	height: 280px;
+}
+.clearfix:before,
+.clearfix:after {
+	display: table;
+	content: "";
+}
+.clearfix:after {
+	clear: both
+}
+

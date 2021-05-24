@@ -1,0 +1,26 @@
+
+.el-header {
+	background-color: #B3C0D1;
+	color: #333;
+	line-height: 60px;
+}
+.el-aside {
+	color: #333;
+}
+.mybtn{
+	margin-right: 10px;
+}
+.checkboxGroup {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	        flex-direction: column;
+	/* align-items: center; */
+}
+.el-checkbox {
+	margin: 10px 0px 10px 40px;
+}
+

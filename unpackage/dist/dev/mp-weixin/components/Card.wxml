@@ -1,0 +1,1 @@
+<view class="course_item"><view class="level">{{level}}</view><view class="courseone"><view class="course_name">{{courseName}}</view><view class="course_summary">{{collegeName}}</view></view><view class="{{[req=='必修'?'course_request1':'course_request2']}}">{{req}}</view></view>

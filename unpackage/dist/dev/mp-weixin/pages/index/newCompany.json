@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "新增企业",
+  "usingComponents": {
+    "necessary-title": "/components/NecessaryTitle"
+  }
+}
