@@ -11,19 +11,20 @@
 						<span style="color: #409EFF;">{{ item.companyName }}</span>
 						<div class="bottom clearfix">
 							<time class="time">{{ item.slogan }}</time>
-							<el-popconfirm
-							  confirm-button-text='删除'
-							  cancel-button-text='不用了'
-							  icon="el-icon-info"
-							  icon-color="red"
-							  title="确定删除该公司嘛？"
-							  @confirm="deleteCompany(item)"
-							>
-								<el-button  type="text" class="button" slot="reference">删除</el-button>
-							</el-popconfirm>
 						</div>
 					</div>
 				</div>
+				<el-popconfirm
+				class="btn"
+				  confirm-button-text='删除'
+				  cancel-button-text='不用了'
+				  icon="el-icon-info"
+				  icon-color="red"
+				  title="确定删除该公司嘛？"
+				  @confirm="deleteCompany(item)"
+				>
+					<el-button  type="text" class="button" slot="reference">删除</el-button>
+				</el-popconfirm>
 			</el-card>
 		</el-col>
 		<div @tap="newCompany()">
@@ -65,6 +66,10 @@
 				}).then(() => {
 					this.load()
 				})
+			},
+			stopPropagation(e){
+				console.log(e);
+				even.stopPropagation()
 			},
 			gotoCompany(item){
 				console.log(item.companyName);
@@ -140,6 +145,13 @@
 	
 	.card{
 		height: 280px;
+		position: relative;
+	}
+	
+	.btn{
+		position: absolute;
+		right: 5px;
+		bottom: 5px;
 	}
 	
 	.clearfix:before,
