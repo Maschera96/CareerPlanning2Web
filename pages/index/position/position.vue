@@ -111,6 +111,12 @@
 					success: (res) => {
 						console.log(res.data.data.data);
 						this.job = res.data.data.data
+						// uni.request({
+						// 	url: `http://1.15.175.248:8002/job/get/${this.job[0].indexCode}/0002`,
+						// 	success: (res) => {
+						// 		console.log(res);
+						// 	}
+						// })
 					}
 				})
 			},

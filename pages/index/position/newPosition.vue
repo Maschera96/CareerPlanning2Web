@@ -3,7 +3,7 @@
 		</el-alert>
 		<el-row>
 			<!-- 左列 -->
-			<el-col :span="6" :offset="3" style="margin-top: 50px;">
+			<el-col :span="6" :offset="2" style="margin-top: 20px;">
 				<NecessaryTitle title="岗位名称"></NecessaryTitle>
 				<el-input v-model="input.jobName" placeholder="请输入内容" style="margin: 5px 0px 20px 0px"></el-input>
 				<NecessaryTitle title="工作地点"></NecessaryTitle>
@@ -34,15 +34,16 @@
 				<!-- <span>企业产品</span>
 				<el-input  placeholder="请输入内容" style="margin: 5px 0px 20px 0px"></el-input> -->
 				<NecessaryTitle title="岗位职责"></NecessaryTitle>
-				<el-input v-model="input.jobDuty" placeholder="请输入内容" style="margin: 5px 0px 20px 0px"></el-input>
-				<NecessaryTitle title="岗位要求"></NecessaryTitle>
-				<el-input style="margin: 5px 0px 20px 0px" type="textarea" :rows="3" placeholder="请输入内容"
+				<el-input style="margin: 5px 0px 20px 0px" type="textarea" :rows="7" placeholder="请输入内容"
+					v-model="input.jobDuty">
+				</el-input>
+				<el-input style="margin: 5px 0px 20px 0px" type="textarea" :rows="7" placeholder="请输入内容"
 					v-model="input.jobRequirement">
 				</el-input>
 			</el-col>
 
 			<!-- 右列 -->
-			<el-col :span="6" :offset="5" style="margin-top: 50px;">
+			<el-col :span="13" :offset="1" style="margin-top: 20px;">
 				<!-- 薪资 -->
 				<NecessaryTitle title="薪资"></NecessaryTitle>
 				<el-row class="salaryBox">
@@ -52,32 +53,48 @@
 				</el-row>
 				<el-slider class="myslider" v-model="value" range :marks="marks" :max="20">
 				</el-slider>
-				
-				<!-- 推荐课程 -->
-				<span>推荐课程</span>
-				<div v-if="!checkedCourse.length" class="help">点击下面添加课程，再次点击已添加的课程可删除</div>
-				<li style="list-style: none;" v-for="(i,index) in checkedCourse" @click="deleteCourse(index)">
-					<Card
-						class="card"
-						:lessonCode="i.indexCode"
-						:courseName="i.courseName"
-						:collegeName="i.collegeName"
-					></Card>
-				</li>
-				<div class="courseCheck">
-					<ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
-						<li v-for="i in courseList" @click="checkCourse(i)">
-							<Card
-								class="card"
-								:lessonCode="i.indexCode"
-								:courseName="i.courseName"
-								:collegeName="i.collegeName"
-							></Card>
+
+				<el-row>
+					<el-col :span="11">
+						<!-- 推荐课程 -->
+						<span>推荐课程</span>
+						<div v-if="!checkedCourse.length" class="help">点击下面添加课程，再次点击已添加的课程可删除</div>
+						<li style="list-style: none;" v-for="(i,index) in checkedCourse"
+							@click="checkedCourse.splice(index,1)">
+							<CourseCard class="card" :lessonCode="i.indexCode" :courseName="i.courseName"
+								:collegeName="i.collegeName"></CourseCard>
 						</li>
-					</ul>
-				</div>
-				
-				
+						<div class="courseCheck">
+							<ul class="infinite-list" v-infinite-scroll="courseLoad" style="overflow:auto">
+								<li v-for="i in courseList" @click="checkCourse(i)">
+									<CourseCard class="card" :lessonCode="i.indexCode" :courseName="i.courseName"
+										:collegeName="i.collegeName"></CourseCard>
+								</li>
+							</ul>
+						</div>
+					</el-col>
+					<el-col :span="11" :offset="1">
+						<!-- 推荐书籍 -->
+						<span>推荐书籍</span>
+						<div v-if="!checkedBook.length" class="help">点击下面添加书籍，再次点击已添加的书籍可删除</div>
+						<li style="list-style: none;" v-for="(i,index) in checkedBook"
+							@click="checkedBook.splice(index,1)">
+							<BookCard class="card" :imgurl="i.bookPic" :title="i.bookName" :author="i.author"
+								:publish="i.press"></BookCard>
+						</li>
+						<div class="courseCheck">
+							<ul class="infinite-list" v-infinite-scroll="bookLoad" style="overflow:auto">
+								<li v-for="i in bookList" @click="checkBook(i)">
+									<BookCard class="card" :imgurl="i.img" :title="i.title" :author="i.author"
+										:publish="i.publish"></BookCard>
+								</li>
+							</ul>
+						</div>
+					</el-col>
+				</el-row>
+
+
+
 			</el-col>
 		</el-row>
 		<el-row class="submit">
@@ -89,12 +106,15 @@
 
 <script>
 	import NecessaryTitle from '@/components/NecessaryTitle.vue'
-	import Card from '@/components/Card.vue'
+	import CourseCard from '@/components/CourseCard.vue'
+	import BookCard from '@/components/BookCard.vue'
+
 
 	export default {
 		components: {
 			NecessaryTitle,
-			Card
+			CourseCard,
+			BookCard
 		},
 		data() {
 			return {
@@ -127,9 +147,12 @@
 				},
 				courseList: [],
 				checkedCourse: [],
-				pageIndex: 1,
-				pageSize: 5,
-				count: 0
+				courseIndex: 1,
+				courseSize: 5,
+				bookList: [],
+				checkedBook: [],
+				bookIndex: 1,
+				bookSize: 5,
 			};
 		},
 		onLoad: function(e) {
@@ -137,19 +160,32 @@
 			this.input.salary = `${this.value[0]}k-${this.value[1]}k`
 		},
 		methods: {
-			load() {
+			courseLoad() {
 				uni.request({
-					url: `http://1.15.175.248:8002/course/list/${this.pageIndex}/${this.pageSize}`,
+					url: `http://1.15.175.248:8002/course/list/${this.courseIndex}/${this.courseSize}`,
 					success: (res) => {
 						this.courseList = this.courseList.concat(res.data.data.data)
 					}
 				})
-				this.pageIndex ++
+				this.courseIndex++
 			},
-			checkCourse(e){
+			bookLoad() {
+				// return
+				uni.request({
+					url: `http://1.15.175.248:8002/book/list/${this.bookIndex}/${this.bookSize}`,
+					success: (res) => {
+						this.bookList = this.bookList.concat(res.data.data.data)
+						console.log(res);
+					}
+				})
+				this.bookIndex++
+			},
+			checkCourse(e) {
 				//调整格式
 				let type = '选修'
-				if(e.courseName[0] === 'A'){type = '必修'}
+				if (e.courseName[0] === 'A') {
+					type = '必修'
+				}
 				let obj = {
 					indexCode: e.indexCode,
 					courseName: e.courseName,
@@ -158,8 +194,9 @@
 				//入栈
 				this.checkedCourse.push(obj)
 			},
-			deleteCourse(index){
-				let i = this.checkedCourse.splice(index,1)
+			checkBook(e) {
+				//入栈
+				this.checkedBook.push(e)
 			},
 			selectCity() {
 				let _jobPlace = this.checkboxGroup1[0]
@@ -180,10 +217,17 @@
 						return
 					}
 				}
-				if(this.checkedCourse.length){
+				//判断时候选择了课程
+				if (this.checkedCourse.length) {
 					this.input.courses = this.checkedCourse
-				}else if(this.checkedCourse){
+				} else if (this.checkedCourse) {
 					delete this.input.courses
+				}
+				//判断是否选择了书籍
+				if (this.checkedBook.length) {
+					this.input.books = this.checkedBook
+				} else if (this.checkedBook) {
+					delete this.input.books
 				}
 				// console.log(this.input);
 				// return
@@ -209,14 +253,14 @@
 </script>
 
 <style>
-	.infinite-list{
-		height: 300px;
+	.infinite-list {
+		height: 450px;
 		padding: 0;
 		margin: 0;
 		list-style: none;
 	}
-	
-	.infinite-list-item{
+
+	.infinite-list-item {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -225,7 +269,7 @@
 		margin: 10px;
 		color: #7dbcfc;
 	}
-	
+
 	.submit {
 		display: flex;
 		justify-content: center;
@@ -287,26 +331,27 @@
 		height: 178px;
 		display: block;
 	}
-	
-	.courseCheck{
+
+	.courseCheck {
 		margin: 20px 0px;
 		border: 2px dashed #eee;
 		border-radius: 5px;
 		padding: 5px;
 	}
-	
-	.card:hover{
+
+	.card:hover {
 		box-shadow: 0px 3px 6px rgb(160, 207, 255);
 	}
-	
-	.help{
+
+	.help {
 		height: 80px;
 		box-sizing: border-box;
-		width: 317px;
+		width: 100%;
 		border: 2px dashed #eee;
 		border-radius: 5px;
 		padding: 15px 30px;
 		margin-top: 12px;
 		color: #8C939D;
+		overflow: hidden;
 	}
 </style>
