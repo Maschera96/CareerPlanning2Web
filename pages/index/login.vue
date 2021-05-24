@@ -5,7 +5,7 @@
 			<span>账号</span>
 			<el-input v-model="userName" placeholder="请输入内容" style="margin: 5px 0px 20px 0px"></el-input>
 			<span>密码</span>
-			<el-input v-model="password" placeholder="请输入内容" style="margin: 5px 0px 20px 0px"></el-input>
+			<el-input v-model="password" placeholder="请输入内容" style="margin: 5px 0px 20px 0px"show-password></el-input>
 			<el-row class="submit">
 				<el-button type="primary" @click="submitFn()">登陆</el-button>
 			</el-row>
