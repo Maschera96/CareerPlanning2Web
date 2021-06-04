@@ -172,6 +172,11 @@
 				} else {
 					_jobType = this.checkedType.join(' ')
 				}
+				console.log('搜索内容',{
+						'jobPlaces': _jobPlace,
+						'jobTypes': _jobType,
+						'companyIndexCode': this.index
+					});
 				uni.request({
 					url: `http://1.15.175.248:8004/search/job/${pageIndex}/${pageSize}`,
 					method: 'POST',
