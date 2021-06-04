@@ -37,6 +37,7 @@
 				<el-input style="margin: 5px 0px 20px 0px" type="textarea" :rows="7" placeholder="请输入内容"
 					v-model="input.jobDuty">
 				</el-input>
+				<NecessaryTitle title="岗位要求"></NecessaryTitle>
 				<el-input style="margin: 5px 0px 20px 0px" type="textarea" :rows="7" placeholder="请输入内容"
 					v-model="input.jobRequirement">
 				</el-input>
@@ -79,8 +80,8 @@
 						<div v-if="!checkedBook.length" class="help">点击下面添加书籍，再次点击已添加的书籍可删除</div>
 						<li style="list-style: none;" v-for="(i,index) in checkedBook"
 							@click="checkedBook.splice(index,1)">
-							<BookCard class="card" :imgurl="i.bookPic" :title="i.bookName" :author="i.author"
-								:publish="i.press"></BookCard>
+							<BookCard class="card" :imgurl="i.img" :title="i.title" :author="i.author"
+								:publish="i.publish"></BookCard>
 						</li>
 						<div class="courseCheck">
 							<ul class="infinite-list" v-infinite-scroll="bookLoad" style="overflow:auto">
@@ -181,6 +182,7 @@
 				this.bookIndex++
 			},
 			checkCourse(e) {
+				console.log(e);
 				//调整格式
 				let type = '选修'
 				if (e.courseName[0] === 'A') {
@@ -189,13 +191,15 @@
 				let obj = {
 					indexCode: e.indexCode,
 					courseName: e.courseName,
-					courseType: type
+					courseType: type,
+					collegeName: e.collegeName
 				}
 				//入栈
 				this.checkedCourse.push(obj)
 			},
 			checkBook(e) {
 				//入栈
+				console.log(e);
 				this.checkedBook.push(e)
 			},
 			selectCity() {
